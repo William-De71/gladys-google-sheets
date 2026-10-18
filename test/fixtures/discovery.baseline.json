@@ -1,0 +1,375 @@
+{
+  "_comment": "Generated from version 0.1.0. Never update without a documented migration (see test/structure.test.js).",
+  "devices": [
+    {
+      "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B2",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B2:value",
+          "category": "unknown",
+          "type": "unknown",
+          "min": -1000000000,
+          "max": 1000000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    {
+      "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B3",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B3:value",
+          "category": "text",
+          "type": "text",
+          "min": 0,
+          "max": 0,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    {
+      "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B4",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B4:value",
+          "category": "temperature-sensor",
+          "type": "decimal",
+          "unit": "celsius",
+          "min": -100,
+          "max": 200,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    {
+      "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B5",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B5:value",
+          "category": "currency",
+          "type": "decimal",
+          "unit": "euro",
+          "min": -1000000000,
+          "max": 1000000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    {
+      "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B6",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B6:value",
+          "category": "currency",
+          "type": "decimal",
+          "unit": "dollar",
+          "min": -1000000000,
+          "max": 1000000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    {
+      "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B7",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:cell:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:0:B7:value",
+          "category": "energy-sensor",
+          "type": "index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 1000000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    {
+      "external_id": "ext:test-integration:rows:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:1729:A-Z",
+      "should_poll": false,
+      "params": ["SPREADSHEET_ID", "SHEET_ID", "RANGE"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:rows:1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms:1729:A-Z:rows",
+          "category": "counter-sensor",
+          "type": "integer",
+          "min": 0,
+          "max": 10000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    }
+  ],
+  "manifest": {
+    "config_schema": [
+      {
+        "key": "intro",
+        "type": "section"
+      },
+      {
+        "key": "client_id",
+        "type": "string"
+      },
+      {
+        "key": "client_secret",
+        "type": "secret"
+      },
+      {
+        "key": "connect_intro",
+        "type": "section"
+      },
+      {
+        "key": "google_account",
+        "type": "oauth2"
+      },
+      {
+        "key": "options_intro",
+        "type": "section"
+      },
+      {
+        "key": "spreadsheet",
+        "type": "string"
+      },
+      {
+        "key": "poll_minutes",
+        "type": "number"
+      },
+      {
+        "key": "language",
+        "type": "select"
+      }
+    ],
+    "actions": [
+      "add_cell",
+      "add_rows",
+      "remove_watch",
+      "list_watches",
+      "test_connection",
+      "diagnostic",
+      "disconnect"
+    ],
+    "scene_triggers": [
+      {
+        "key": "cell_changed",
+        "fields": [
+          {
+            "key": "watch",
+            "options": []
+          },
+          {
+            "key": "value",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "watch_name",
+            "type": "string"
+          },
+          {
+            "key": "spreadsheet_name",
+            "type": "string"
+          },
+          {
+            "key": "sheet_name",
+            "type": "string"
+          },
+          {
+            "key": "cell",
+            "type": "string"
+          },
+          {
+            "key": "value",
+            "type": "string"
+          },
+          {
+            "key": "previous_value",
+            "type": "string"
+          },
+          {
+            "key": "is_number",
+            "type": "boolean"
+          },
+          {
+            "key": "number",
+            "type": "number"
+          },
+          {
+            "key": "previous_number",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "row_added",
+        "fields": [
+          {
+            "key": "watch",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "watch_name",
+            "type": "string"
+          },
+          {
+            "key": "spreadsheet_name",
+            "type": "string"
+          },
+          {
+            "key": "sheet_name",
+            "type": "string"
+          },
+          {
+            "key": "row",
+            "type": "number"
+          },
+          {
+            "key": "first_column",
+            "type": "string"
+          },
+          {
+            "key": "values",
+            "type": "string"
+          },
+          {
+            "key": "column_1",
+            "type": "string"
+          },
+          {
+            "key": "column_2",
+            "type": "string"
+          },
+          {
+            "key": "column_3",
+            "type": "string"
+          },
+          {
+            "key": "column_4",
+            "type": "string"
+          },
+          {
+            "key": "column_5",
+            "type": "string"
+          },
+          {
+            "key": "column_6",
+            "type": "string"
+          },
+          {
+            "key": "column_7",
+            "type": "string"
+          },
+          {
+            "key": "column_8",
+            "type": "string"
+          },
+          {
+            "key": "column_9",
+            "type": "string"
+          },
+          {
+            "key": "column_10",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "scene_actions": [
+      {
+        "key": "append_row",
+        "fields": ["spreadsheet", "sheet", "values", "timestamp", "input"],
+        "outputs": [
+          {
+            "key": "row",
+            "type": "number"
+          },
+          {
+            "key": "updated_range",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "write_cells",
+        "fields": ["spreadsheet", "sheet", "range", "values", "input"],
+        "outputs": [
+          {
+            "key": "updated_range",
+            "type": "string"
+          },
+          {
+            "key": "updated_cells",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "read_cells",
+        "fields": ["spreadsheet", "sheet", "range"],
+        "outputs": [
+          {
+            "key": "value",
+            "type": "string"
+          },
+          {
+            "key": "number",
+            "type": "number"
+          },
+          {
+            "key": "is_number",
+            "type": "boolean"
+          },
+          {
+            "key": "values",
+            "type": "string"
+          },
+          {
+            "key": "cell_count",
+            "type": "number"
+          },
+          {
+            "key": "row_count",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "clear_range",
+        "fields": ["spreadsheet", "sheet", "range"],
+        "outputs": [
+          {
+            "key": "cleared_range",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "key": "rows",
+        "settings": ["watch", "count", "form"]
+      }
+    ],
+    "widget_actions": ["add_row", "refresh"]
+  }
+}

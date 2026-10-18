@@ -1,0 +1,11 @@
+Gladys Google Sheets integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The integration follows the public documentation of the Google Sheets API v4
+and of Google OAuth 2.0 for web server applications. No Google code or asset
+is included.
+
+Google and Google Sheets are trademarks of Google LLC. This community
+integration is not affiliated with, endorsed or sponsored by Google.

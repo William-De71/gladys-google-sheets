@@ -1,0 +1,42 @@
+{
+  "name": "gladys-google-sheets",
+  "version": "0.1.0",
+  "private": true,
+  "description": "External Gladys Assistant integration for Google Sheets: scene actions to append, write, read and clear cells, watched cells as devices, new-row and cell-change scene triggers, and a rows widget.",
+  "homepage": "https://github.com/William-De71/gladys-google-sheets",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/William-De71/gladys-google-sheets.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@gladysassistant/integration-sdk": "^0.15.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "gladys-assistant",
+    "gladys-assistant-integration",
+    "google-sheets",
+    "spreadsheet",
+    "google-forms",
+    "home-automation"
+  ]
+}

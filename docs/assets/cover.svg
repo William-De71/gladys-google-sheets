@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="534" viewBox="0 0 800 534">
+  <!-- Cover of the Google Sheets integration for Gladys Assistant (illustration,
+       no Google logo). Built into cover.jpg by scripts/build-cover.sh. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d2a1c"/>
+      <stop offset="1" stop-color="#14523a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#3ddc84" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#3ddc84" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="534" fill="url(#bg)"/>
+  <g stroke="#1d5a40" stroke-width="1">
+    <path d="M0 89 H800 M0 178 H800 M0 267 H800 M0 356 H800 M0 445 H800"/>
+    <path d="M100 0 V534 M200 0 V534 M300 0 V534 M400 0 V534 M500 0 V534 M600 0 V534 M700 0 V534"/>
+  </g>
+  <ellipse cx="260" cy="280" rx="260" ry="200" fill="url(#glow)"/>
+
+  <!-- the spreadsheet -->
+  <rect x="74" y="104" width="360" height="350" rx="22" fill="#000000" opacity="0.28"/>
+  <rect x="70" y="92" width="360" height="350" rx="22" fill="#ffffff"/>
+  <rect x="70" y="92" width="360" height="62" rx="22" fill="#1e8e3e"/>
+  <rect x="70" y="132" width="360" height="22" fill="#1e8e3e"/>
+  <g fill="none" stroke="#ffffff" stroke-width="3">
+    <rect x="96" y="111" width="26" height="26" rx="4"/>
+    <path d="M96 120 H122 M96 129 H122 M105 111 V137"/>
+  </g>
+  <rect x="136" y="117" width="150" height="14" rx="7" fill="#ffffff" opacity="0.9"/>
+
+  <!-- header row -->
+  <rect x="90" y="172" width="320" height="34" fill="#e6f4ea"/>
+  <rect x="102" y="184" width="70" height="10" rx="5" fill="#1e8e3e"/>
+  <rect x="202" y="184" width="70" height="10" rx="5" fill="#1e8e3e"/>
+  <rect x="302" y="184" width="70" height="10" rx="5" fill="#1e8e3e"/>
+  <!-- grid -->
+  <g stroke="#d5dde6" stroke-width="2" fill="none">
+    <rect x="90" y="172" width="320" height="238"/>
+    <path d="M90 206 H410 M90 240 H410 M90 274 H410 M90 308 H410 M90 342 H410 M90 376 H410"/>
+    <path d="M190 172 V410 M290 172 V410"/>
+  </g>
+  <g fill="#273449">
+    <rect x="102" y="218" width="70" height="10" rx="5"/>
+    <rect x="202" y="218" width="44" height="10" rx="5"/>
+    <rect x="302" y="218" width="54" height="10" rx="5"/>
+    <rect x="102" y="252" width="70" height="10" rx="5"/>
+    <rect x="202" y="252" width="50" height="10" rx="5"/>
+    <rect x="302" y="252" width="40" height="10" rx="5"/>
+    <rect x="102" y="286" width="70" height="10" rx="5"/>
+    <rect x="202" y="286" width="38" height="10" rx="5"/>
+    <rect x="302" y="286" width="60" height="10" rx="5"/>
+  </g>
+  <!-- the new row, written by Gladys -->
+  <rect x="91" y="309" width="318" height="32" fill="#fff4d6"/>
+  <g fill="#b06000">
+    <rect x="102" y="320" width="70" height="10" rx="5"/>
+    <rect x="202" y="320" width="46" height="10" rx="5"/>
+    <rect x="302" y="320" width="56" height="10" rx="5"/>
+  </g>
+  <rect x="90" y="308" width="320" height="34" fill="none" stroke="#f59f00" stroke-width="3"/>
+
+  <!-- link to the house (Gladys), both ways -->
+  <g fill="none" stroke="#5fd08f" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 13">
+    <path d="M450 252 H560"/>
+    <path d="M450 284 H560"/>
+  </g>
+  <path d="M552 244 l12 8 l-12 8" fill="none" stroke="#5fd08f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M458 276 l-12 8 l12 8" fill="none" stroke="#5fd08f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(640 268)">
+    <circle r="62" fill="#123d2b" stroke="#7fe0a8" stroke-width="4"/>
+    <path d="M-30 4 L0 -24 L30 4 M-20 -4 V26 H20 V-4" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-7" y="8" width="14" height="18" fill="#ffffff"/>
+  </g>
+
+  <g font-family="DejaVu Sans, Arial, sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="640" y="380" font-size="30" font-weight="bold">Google Sheets</text>
+    <text x="640" y="412" font-size="18" fill="#a9e4c2">Gladys Assistant</text>
+  </g>
+</svg>

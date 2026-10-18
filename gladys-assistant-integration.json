@@ -1,0 +1,1697 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Google Sheets",
+  "description": {
+    "en": "Google Sheets in Gladys: log rows from scenes, watch cells and new rows, widget.",
+    "fr": "Google Sheets dans Gladys : journaliser depuis les scènes, surveiller cellules et lignes.",
+    "de": "Google Sheets in Gladys: Zeilen aus Szenen schreiben, Zellen und neue Zeilen überwachen.",
+    "es": "Google Sheets en Gladys: registrar filas desde escenas, vigilar celdas y filas nuevas."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-google-sheets:0.1.0",
+  "gladys_version": ">=5.2.0",
+  "categories": ["services"],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-google-sheets/main/cover.jpg",
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "1. Your Google Cloud OAuth client",
+        "fr": "1. Votre client OAuth Google Cloud",
+        "de": "1. Dein Google-Cloud-OAuth-Client",
+        "es": "1. Tu cliente OAuth de Google Cloud"
+      },
+      "description": {
+        "en": "Google gives no shared key: create a free project in the Google Cloud console, enable the Google Sheets API, configure the consent screen (External) and publish it \"In production\", then create an OAuth client of type \"Web application\" whose authorized redirect URI is exactly https://my.gladysassistant.com/redirect/oauth. The documentation details every step.",
+        "fr": "Google ne fournit pas de clé partagée : créez un projet gratuit dans la console Google Cloud, activez l’API Google Sheets, configurez l’écran de consentement (Externe) et publiez-le « En production », puis créez un client OAuth de type « Application Web » dont l’URI de redirection autorisée est exactement https://my.gladysassistant.com/redirect/oauth. La documentation détaille chaque étape.",
+        "de": "Google stellt keinen gemeinsamen Schlüssel bereit: Lege in der Google-Cloud-Konsole ein kostenloses Projekt an, aktiviere die Google Sheets API, richte den Zustimmungsbildschirm (Extern) ein und veröffentliche ihn „In Produktion“. Erstelle dann einen OAuth-Client vom Typ „Webanwendung“ mit genau dieser autorisierten Weiterleitungs-URI: https://my.gladysassistant.com/redirect/oauth. Die Dokumentation beschreibt jeden Schritt.",
+        "es": "Google no ofrece una clave compartida: crea un proyecto gratuito en la consola de Google Cloud, activa la API de Google Sheets, configura la pantalla de consentimiento (Externo) y publícala «En producción», y crea un cliente OAuth de tipo «Aplicación web» cuyo URI de redireccionamiento autorizado sea exactamente https://my.gladysassistant.com/redirect/oauth. La documentación detalla cada paso."
+      },
+      "links": [
+        {
+          "url": "https://console.cloud.google.com/apis/library/sheets.googleapis.com",
+          "label": {
+            "en": "Enable the Google Sheets API",
+            "fr": "Activer l’API Google Sheets",
+            "de": "Google Sheets API aktivieren",
+            "es": "Activar la API de Google Sheets"
+          }
+        },
+        {
+          "url": "https://console.cloud.google.com/auth/clients",
+          "label": {
+            "en": "OAuth clients",
+            "fr": "Clients OAuth",
+            "de": "OAuth-Clients",
+            "es": "Clientes OAuth"
+          }
+        },
+        {
+          "url": "https://github.com/William-De71/gladys-google-sheets/blob/main/docs/en.md",
+          "label": {
+            "en": "Step-by-step guide",
+            "fr": "Guide pas à pas",
+            "de": "Schritt-für-Schritt-Anleitung",
+            "es": "Guía paso a paso"
+          }
+        }
+      ]
+    },
+    {
+      "key": "client_id",
+      "type": "string",
+      "label": {
+        "en": "Client ID",
+        "fr": "Client ID",
+        "de": "Client-ID",
+        "es": "Client ID"
+      },
+      "description": {
+        "en": "Ends with .apps.googleusercontent.com.",
+        "fr": "Se termine par .apps.googleusercontent.com.",
+        "de": "Endet auf .apps.googleusercontent.com.",
+        "es": "Termina en .apps.googleusercontent.com."
+      },
+      "placeholder": {
+        "en": "123456789012-abc.apps.googleusercontent.com",
+        "fr": "123456789012-abc.apps.googleusercontent.com",
+        "de": "123456789012-abc.apps.googleusercontent.com",
+        "es": "123456789012-abc.apps.googleusercontent.com"
+      },
+      "required": true
+    },
+    {
+      "key": "client_secret",
+      "type": "secret",
+      "label": {
+        "en": "Client secret",
+        "fr": "Client secret",
+        "de": "Clientschlüssel",
+        "es": "Client secret"
+      },
+      "description": {
+        "en": "Shown by Google when the client is created (it starts with GOCSPX-).",
+        "fr": "Affiché par Google à la création du client (il commence par GOCSPX-).",
+        "de": "Wird von Google beim Erstellen des Clients angezeigt (beginnt mit GOCSPX-).",
+        "es": "Google lo muestra al crear el cliente (empieza por GOCSPX-)."
+      },
+      "required": true
+    },
+    {
+      "key": "connect_intro",
+      "type": "section",
+      "label": {
+        "en": "2. Connect your Google account",
+        "fr": "2. Connectez votre compte Google",
+        "de": "2. Verbinde dein Google-Konto",
+        "es": "2. Conecta tu cuenta de Google"
+      },
+      "description": {
+        "en": "Save first, then click the button. Google warns that it \"hasn’t verified this app\": it is your own app, click Advanced, then Go to (unsafe), and tick the Google Sheets permission. Connect again whenever Gladys reports a revoked access.",
+        "fr": "Enregistrez d’abord, puis cliquez sur le bouton. Google prévient qu’il « n’a pas validé cette application » : c’est votre propre application, cliquez sur Paramètres avancés puis Accéder à… (non sécurisé), et cochez l’autorisation Google Sheets. Reconnectez-vous si Gladys signale un accès révoqué.",
+        "de": "Zuerst speichern, dann auf die Schaltfläche klicken. Google warnt, dass es „diese App nicht überprüft hat“: Es ist deine eigene App. Klicke auf Erweitert, dann auf „Weiter zu … (unsicher)“ und setze das Häkchen bei der Google-Sheets-Berechtigung. Verbinde dich erneut, wenn Gladys einen widerrufenen Zugriff meldet.",
+        "es": "Guarda primero y pulsa el botón. Google avisa de que «no ha verificado esta aplicación»: es tu propia aplicación, pulsa Configuración avanzada y luego Ir a… (no seguro), y marca el permiso de Google Sheets. Vuelve a conectarte si Gladys indica un acceso revocado."
+      }
+    },
+    {
+      "key": "google_account",
+      "type": "oauth2",
+      "label": {
+        "en": "Connect with Google",
+        "fr": "Se connecter avec Google",
+        "de": "Mit Google verbinden",
+        "es": "Conectar con Google"
+      },
+      "description": {
+        "en": "Gladys only asks for the Google Sheets permission (read and edit your spreadsheets), never Drive.",
+        "fr": "Gladys ne demande que l’autorisation Google Sheets (lire et modifier vos feuilles de calcul), jamais Drive.",
+        "de": "Gladys fragt nur die Google-Sheets-Berechtigung an (Tabellen lesen und bearbeiten), nie Drive.",
+        "es": "Gladys solo pide el permiso de Google Sheets (leer y editar tus hojas de cálculo), nunca Drive."
+      }
+    },
+    {
+      "key": "options_intro",
+      "type": "section",
+      "label": {
+        "en": "3. Options",
+        "fr": "3. Options",
+        "de": "3. Optionen",
+        "es": "3. Opciones"
+      },
+      "description": {
+        "en": "Google Sheets sends no notification: the watched cells and rows are read on a timer. Declare them with the buttons below (\"Watch a cell\", \"Watch new rows\"), then create their devices in Discovery.",
+        "fr": "Google Sheets n’envoie aucune notification : les cellules et lignes surveillées sont relues à intervalle régulier. Déclarez-les avec les boutons ci-dessous (« Surveiller une cellule », « Surveiller les nouvelles lignes »), puis créez leurs appareils dans la découverte.",
+        "de": "Google Sheets sendet keine Benachrichtigungen: Die überwachten Zellen und Zeilen werden regelmäßig gelesen. Lege sie mit den Schaltflächen unten an („Zelle überwachen“, „Neue Zeilen überwachen“) und erstelle dann ihre Geräte in der Geräteerkennung.",
+        "es": "Google Sheets no envía notificaciones: las celdas y filas vigiladas se leen a intervalos regulares. Decláralas con los botones de abajo («Vigilar una celda», «Vigilar filas nuevas») y crea sus dispositivos en el descubrimiento."
+      }
+    },
+    {
+      "key": "spreadsheet",
+      "type": "string",
+      "label": {
+        "en": "Default spreadsheet",
+        "fr": "Classeur par défaut",
+        "de": "Standardtabelle",
+        "es": "Hoja de cálculo predeterminada"
+      },
+      "description": {
+        "en": "The URL of the spreadsheet as shown in your browser (or its ID): used by the scene actions, the watches and the widget that name no other.",
+        "fr": "L’URL du classeur telle qu’affichée dans votre navigateur (ou son identifiant) : utilisée par les actions de scène, les surveillances et le widget qui n’en indiquent pas d’autre.",
+        "de": "Die URL der Tabelle, wie sie im Browser angezeigt wird (oder ihre ID): für die Szenenaktionen, Überwachungen und das Widget, die keine andere angeben.",
+        "es": "La URL de la hoja de cálculo tal como aparece en el navegador (o su ID): la usan las acciones de escena, las vigilancias y el widget que no indican otra."
+      },
+      "placeholder": {
+        "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+        "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+        "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+        "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+      },
+      "required": false
+    },
+    {
+      "key": "poll_minutes",
+      "type": "number",
+      "label": {
+        "en": "Read the watches every (minutes)",
+        "fr": "Relire les surveillances toutes les (minutes)",
+        "de": "Überwachungen lesen alle (Minuten)",
+        "es": "Leer las vigilancias cada (minutos)"
+      },
+      "description": {
+        "en": "Each reading costs 2 or 3 requests per watched spreadsheet; Google allows 60 a minute per account, without a daily limit.",
+        "fr": "Chaque lecture coûte 2 ou 3 requêtes par classeur surveillé ; Google en autorise 60 par minute et par compte, sans limite quotidienne.",
+        "de": "Jede Abfrage kostet 2 oder 3 Anfragen pro überwachter Tabelle; Google erlaubt 60 pro Minute und Konto, ohne Tageslimit.",
+        "es": "Cada lectura cuesta 2 o 3 solicitudes por hoja vigilada; Google permite 60 por minuto y cuenta, sin límite diario."
+      },
+      "min": 1,
+      "max": 60,
+      "default": 2,
+      "required": false
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "label": {
+        "en": "Language of the texts",
+        "fr": "Langue des textes",
+        "de": "Sprache der Texte",
+        "es": "Idioma de los textos"
+      },
+      "description": {
+        "en": "Feature names and messages of the configuration buttons. Automatic: the language of your dashboard, once a widget has been displayed.",
+        "fr": "Noms des fonctionnalités et messages des boutons de configuration. Automatique : la langue de votre tableau de bord, dès qu’un widget a été affiché.",
+        "de": "Namen der Funktionen und Meldungen der Konfigurationsschaltflächen. Automatisch: die Sprache deines Dashboards, sobald ein Widget angezeigt wurde.",
+        "es": "Nombres de las funciones y mensajes de los botones de configuración. Automático: el idioma de tu panel, en cuanto se haya mostrado un widget."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "Anglais",
+            "de": "Englisch",
+            "es": "Inglés"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "French",
+            "fr": "Français",
+            "de": "Französisch",
+            "es": "Francés"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "German",
+            "fr": "Allemand",
+            "de": "Deutsch",
+            "es": "Alemán"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Spanish",
+            "fr": "Espagnol",
+            "de": "Spanisch",
+            "es": "Español"
+          }
+        }
+      ],
+      "default": "auto",
+      "required": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "add_cell",
+      "label": {
+        "en": "Watch a cell",
+        "fr": "Surveiller une cellule",
+        "de": "Zelle überwachen",
+        "es": "Vigilar una celda"
+      },
+      "description": {
+        "en": "Its value becomes a device (tile, history, conditions) and its changes start the \"cell changed\" scenes.",
+        "fr": "Sa valeur devient un appareil (tuile, historique, conditions) et ses changements lancent les scènes « cellule modifiée ».",
+        "de": "Ihr Wert wird ein Gerät (Kachel, Verlauf, Bedingungen) und ihre Änderungen starten die Szenen „Zelle geändert“.",
+        "es": "Su valor se convierte en un dispositivo (mosaico, historial, condiciones) y sus cambios lanzan las escenas «celda cambiada»."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "spreadsheet",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet",
+            "fr": "Classeur",
+            "de": "Tabelle",
+            "es": "Hoja de cálculo"
+          },
+          "description": {
+            "en": "URL or ID. Empty: the default spreadsheet of the configuration.",
+            "fr": "URL ou identifiant. Vide : le classeur par défaut de la configuration.",
+            "de": "URL oder ID. Leer: die Standardtabelle der Konfiguration.",
+            "es": "URL o ID. Vacío: la hoja predeterminada de la configuración."
+          },
+          "placeholder": {
+            "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+          },
+          "required": false
+        },
+        {
+          "key": "sheet",
+          "type": "string",
+          "label": {
+            "en": "Tab",
+            "fr": "Onglet",
+            "de": "Tabellenblatt",
+            "es": "Pestaña"
+          },
+          "description": {
+            "en": "Its name, as shown at the bottom of the spreadsheet. Empty: the tab of the URL (gid), or the first one.",
+            "fr": "Son nom, tel qu’affiché en bas du classeur. Vide : l’onglet de l’URL (gid), ou le premier.",
+            "de": "Sein Name, wie unten in der Tabelle angezeigt. Leer: das Blatt der URL (gid) oder das erste.",
+            "es": "Su nombre, tal como aparece abajo en la hoja. Vacío: la pestaña de la URL (gid) o la primera."
+          },
+          "placeholder": {
+            "en": "Sheet1",
+            "fr": "Feuille 1",
+            "de": "Tabellenblatt1",
+            "es": "Hoja 1"
+          },
+          "required": false
+        },
+        {
+          "key": "cell",
+          "type": "string",
+          "label": {
+            "en": "Cell",
+            "fr": "Cellule",
+            "de": "Zelle",
+            "es": "Celda"
+          },
+          "description": {
+            "en": "Like B2 (or Sheet1!B2).",
+            "fr": "Comme B2 (ou Feuille1!B2).",
+            "de": "Wie B2 (oder Tabellenblatt1!B2).",
+            "es": "Como B2 (o Hoja1!B2)."
+          },
+          "placeholder": {
+            "en": "B2",
+            "fr": "B2",
+            "de": "B2",
+            "es": "B2"
+          },
+          "required": true
+        },
+        {
+          "key": "kind",
+          "type": "select",
+          "label": {
+            "en": "Shown in Gladys as",
+            "fr": "Affichée dans Gladys comme",
+            "de": "In Gladys angezeigt als",
+            "es": "Mostrada en Gladys como"
+          },
+          "description": {
+            "en": "Cannot be changed later (remove and add the watch again).",
+            "fr": "Non modifiable ensuite (supprimez et rajoutez la surveillance).",
+            "de": "Später nicht änderbar (Überwachung entfernen und neu hinzufügen).",
+            "es": "No se puede cambiar después (elimina y vuelve a añadir la vigilancia)."
+          },
+          "options": [
+            {
+              "value": "number",
+              "label": {
+                "en": "Number",
+                "fr": "Nombre",
+                "de": "Zahl",
+                "es": "Número"
+              }
+            },
+            {
+              "value": "text",
+              "label": {
+                "en": "Text",
+                "fr": "Texte",
+                "de": "Text",
+                "es": "Texto"
+              }
+            },
+            {
+              "value": "temperature",
+              "label": {
+                "en": "Temperature (°C)",
+                "fr": "Température (°C)",
+                "de": "Temperatur (°C)",
+                "es": "Temperatura (°C)"
+              }
+            },
+            {
+              "value": "euro",
+              "label": {
+                "en": "Amount in euros",
+                "fr": "Montant en euros",
+                "de": "Betrag in Euro",
+                "es": "Importe en euros"
+              }
+            },
+            {
+              "value": "dollar",
+              "label": {
+                "en": "Amount in dollars",
+                "fr": "Montant en dollars",
+                "de": "Betrag in Dollar",
+                "es": "Importe en dólares"
+              }
+            },
+            {
+              "value": "energy_index",
+              "label": {
+                "en": "Energy meter index (kWh)",
+                "fr": "Index de compteur d’énergie (kWh)",
+                "de": "Energiezählerstand (kWh)",
+                "es": "Índice de contador de energía (kWh)"
+              }
+            }
+          ],
+          "default": "number",
+          "required": false
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "label": {
+            "en": "Name in Gladys",
+            "fr": "Nom dans Gladys",
+            "de": "Name in Gladys",
+            "es": "Nombre en Gladys"
+          },
+          "description": {
+            "en": "The device name (60 characters at most). Empty: the tab and the cells.",
+            "fr": "Le nom de l’appareil (60 caractères au maximum). Vide : l’onglet et les cellules.",
+            "de": "Der Gerätename (höchstens 60 Zeichen). Leer: Tabellenblatt und Zellen.",
+            "es": "El nombre del dispositivo (60 caracteres como máximo). Vacío: la pestaña y las celdas."
+          },
+          "required": false
+        }
+      ]
+    },
+    {
+      "key": "add_rows",
+      "label": {
+        "en": "Watch new rows",
+        "fr": "Surveiller les nouvelles lignes",
+        "de": "Neue Zeilen überwachen",
+        "es": "Vigilar filas nuevas"
+      },
+      "description": {
+        "en": "Each new row of the tab (a Google Forms answer, a line typed on the phone) starts the \"row added\" scenes.",
+        "fr": "Chaque nouvelle ligne de l’onglet (réponse Google Forms, ligne saisie sur le téléphone) lance les scènes « ligne ajoutée ».",
+        "de": "Jede neue Zeile des Tabellenblatts (eine Google-Forms-Antwort, eine am Handy getippte Zeile) startet die Szenen „Zeile hinzugefügt“.",
+        "es": "Cada fila nueva de la pestaña (una respuesta de Google Forms, una línea escrita en el móvil) lanza las escenas «fila añadida»."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "spreadsheet",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet",
+            "fr": "Classeur",
+            "de": "Tabelle",
+            "es": "Hoja de cálculo"
+          },
+          "description": {
+            "en": "URL or ID. Empty: the default spreadsheet of the configuration.",
+            "fr": "URL ou identifiant. Vide : le classeur par défaut de la configuration.",
+            "de": "URL oder ID. Leer: die Standardtabelle der Konfiguration.",
+            "es": "URL o ID. Vacío: la hoja predeterminada de la configuración."
+          },
+          "placeholder": {
+            "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+          },
+          "required": false
+        },
+        {
+          "key": "sheet",
+          "type": "string",
+          "label": {
+            "en": "Tab",
+            "fr": "Onglet",
+            "de": "Tabellenblatt",
+            "es": "Pestaña"
+          },
+          "description": {
+            "en": "Its name, as shown at the bottom of the spreadsheet. Empty: the tab of the URL (gid), or the first one.",
+            "fr": "Son nom, tel qu’affiché en bas du classeur. Vide : l’onglet de l’URL (gid), ou le premier.",
+            "de": "Sein Name, wie unten in der Tabelle angezeigt. Leer: das Blatt der URL (gid) oder das erste.",
+            "es": "Su nombre, tal como aparece abajo en la hoja. Vacío: la pestaña de la URL (gid) o la primera."
+          },
+          "placeholder": {
+            "en": "Sheet1",
+            "fr": "Feuille 1",
+            "de": "Tabellenblatt1",
+            "es": "Hoja 1"
+          },
+          "required": false
+        },
+        {
+          "key": "columns",
+          "type": "string",
+          "label": {
+            "en": "Columns",
+            "fr": "Colonnes",
+            "de": "Spalten",
+            "es": "Columnas"
+          },
+          "description": {
+            "en": "Empty: A:Z. A row counts as new when one of these columns is filled.",
+            "fr": "Vide : A:Z. Une ligne compte comme nouvelle dès qu’une de ces colonnes est remplie.",
+            "de": "Leer: A:Z. Eine Zeile gilt als neu, sobald eine dieser Spalten gefüllt ist.",
+            "es": "Vacío: A:Z. Una fila cuenta como nueva en cuanto una de estas columnas tiene datos."
+          },
+          "placeholder": {
+            "en": "A:Z",
+            "fr": "A:Z",
+            "de": "A:Z",
+            "es": "A:Z"
+          },
+          "required": false
+        },
+        {
+          "key": "header",
+          "type": "boolean",
+          "label": {
+            "en": "The first row is a header",
+            "fr": "La première ligne est un en-tête",
+            "de": "Die erste Zeile ist eine Kopfzeile",
+            "es": "La primera fila es un encabezado"
+          },
+          "description": {
+            "en": "Its names label the columns in the widget and are not counted as a row.",
+            "fr": "Ses noms désignent les colonnes dans le widget, et elle n’est pas comptée comme une ligne.",
+            "de": "Ihre Namen beschriften die Spalten im Widget; sie zählt nicht als Zeile.",
+            "es": "Sus nombres identifican las columnas en el widget y no cuenta como fila."
+          },
+          "default": true,
+          "required": false
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "label": {
+            "en": "Name in Gladys",
+            "fr": "Nom dans Gladys",
+            "de": "Name in Gladys",
+            "es": "Nombre en Gladys"
+          },
+          "description": {
+            "en": "The device name (60 characters at most). Empty: the tab and the cells.",
+            "fr": "Le nom de l’appareil (60 caractères au maximum). Vide : l’onglet et les cellules.",
+            "de": "Der Gerätename (höchstens 60 Zeichen). Leer: Tabellenblatt und Zellen.",
+            "es": "El nombre del dispositivo (60 caracteres como máximo). Vacío: la pestaña y las celdas."
+          },
+          "required": false
+        }
+      ]
+    },
+    {
+      "key": "remove_watch",
+      "label": {
+        "en": "Remove a watch",
+        "fr": "Supprimer une surveillance",
+        "de": "Überwachung entfernen",
+        "es": "Eliminar una vigilancia"
+      },
+      "description": {
+        "en": "Stops reading it. Delete its device in Gladys too if you had created it.",
+        "fr": "Arrête sa lecture. Supprimez aussi son appareil dans Gladys si vous l’aviez créé.",
+        "de": "Beendet das Lesen. Lösche auch ihr Gerät in Gladys, falls du es erstellt hattest.",
+        "es": "Deja de leerla. Borra también su dispositivo en Gladys si lo habías creado."
+      },
+      "timeout_seconds": 15,
+      "fields": [
+        {
+          "key": "watch",
+          "type": "string",
+          "label": {
+            "en": "Watch",
+            "fr": "Surveillance",
+            "de": "Überwachung",
+            "es": "Vigilancia"
+          },
+          "description": {
+            "en": "Its number in the list (#2), its name or its identifier.",
+            "fr": "Son numéro dans la liste (#2), son nom ou son identifiant.",
+            "de": "Ihre Nummer in der Liste (#2), ihr Name oder ihre Kennung.",
+            "es": "Su número en la lista (#2), su nombre o su identificador."
+          },
+          "placeholder": {
+            "en": "#2",
+            "fr": "#2",
+            "de": "#2",
+            "es": "#2"
+          },
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "list_watches",
+      "label": {
+        "en": "List the watches",
+        "fr": "Lister les surveillances",
+        "de": "Überwachungen auflisten",
+        "es": "Listar las vigilancias"
+      },
+      "description": {
+        "en": "Every watch with its number, its cells and its last value.",
+        "fr": "Chaque surveillance avec son numéro, ses cellules et sa dernière valeur.",
+        "de": "Jede Überwachung mit Nummer, Zellen und letztem Wert.",
+        "es": "Cada vigilancia con su número, sus celdas y su último valor."
+      },
+      "timeout_seconds": 15
+    },
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Opens the default spreadsheet and reads every watch now.",
+        "fr": "Ouvre le classeur par défaut et relit toutes les surveillances maintenant.",
+        "de": "Öffnet die Standardtabelle und liest jetzt alle Überwachungen.",
+        "es": "Abre la hoja predeterminada y lee ahora todas las vigilancias."
+      },
+      "timeout_seconds": 60
+    },
+    {
+      "key": "diagnostic",
+      "label": {
+        "en": "Diagnostic",
+        "fr": "Diagnostic",
+        "de": "Diagnose",
+        "es": "Diagnóstico"
+      },
+      "description": {
+        "en": "Writes an anonymized summary to the logs of the integration, to attach to a bug report.",
+        "fr": "Écrit un résumé anonymisé dans les journaux de l’intégration, à joindre à un rapport de bug.",
+        "de": "Schreibt eine anonymisierte Zusammenfassung in die Protokolle der Integration, für einen Fehlerbericht.",
+        "es": "Escribe un resumen anonimizado en los registros de la integración, para adjuntar a un informe de error."
+      },
+      "timeout_seconds": 15
+    },
+    {
+      "key": "disconnect",
+      "label": {
+        "en": "Disconnect from Google",
+        "fr": "Se déconnecter de Google",
+        "de": "Von Google trennen",
+        "es": "Desconectar de Google"
+      },
+      "description": {
+        "en": "Revokes the access of Gladys and deletes the tokens. Your watches, devices and scenes are kept.",
+        "fr": "Révoque l’accès de Gladys et supprime les jetons. Vos surveillances, appareils et scènes sont conservés.",
+        "de": "Widerruft den Zugriff von Gladys und löscht die Token. Überwachungen, Geräte und Szenen bleiben erhalten.",
+        "es": "Revoca el acceso de Gladys y borra los tokens. Tus vigilancias, dispositivos y escenas se conservan."
+      },
+      "timeout_seconds": 30
+    }
+  ],
+  "widgets": [
+    {
+      "key": "rows",
+      "label": {
+        "en": "Spreadsheet rows",
+        "fr": "Lignes de classeur",
+        "de": "Tabellenzeilen",
+        "es": "Filas de hoja"
+      },
+      "description": {
+        "en": "The last rows of a watched tab, with a form to add one.",
+        "fr": "Les dernières lignes d’un onglet surveillé, avec un formulaire pour en ajouter.",
+        "de": "Die letzten Zeilen eines überwachten Tabellenblatts, mit Formular zum Hinzufügen.",
+        "es": "Las últimas filas de una pestaña vigilada, con un formulario para añadir una."
+      },
+      "icon": "grid",
+      "action_timeout_seconds": 30,
+      "settings": [
+        {
+          "key": "watch",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Watch",
+            "fr": "Surveillance",
+            "de": "Überwachung",
+            "es": "Vigilancia"
+          },
+          "description": {
+            "en": "A \"new rows\" watch. Empty: the first one.",
+            "fr": "Une surveillance de nouvelles lignes. Vide : la première.",
+            "de": "Eine Überwachung neuer Zeilen. Leer: die erste.",
+            "es": "Una vigilancia de filas nuevas. Vacío: la primera."
+          },
+          "required": false
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": {
+            "en": "Rows shown",
+            "fr": "Lignes affichées",
+            "de": "Angezeigte Zeilen",
+            "es": "Filas mostradas"
+          },
+          "min": 1,
+          "max": 8,
+          "default": 5,
+          "required": false
+        },
+        {
+          "key": "form",
+          "type": "select",
+          "label": {
+            "en": "\"Add a row\" button",
+            "fr": "Bouton « Ajouter une ligne »",
+            "de": "Schaltfläche „Zeile hinzufügen“",
+            "es": "Botón «Añadir una fila»"
+          },
+          "options": [
+            {
+              "value": "add",
+              "label": {
+                "en": "Yes, first 4 columns",
+                "fr": "Oui, 4 premières colonnes",
+                "de": "Ja, erste 4 Spalten",
+                "es": "Sí, 4 primeras columnas"
+              }
+            },
+            {
+              "value": "add_timestamp",
+              "label": {
+                "en": "Yes, date and time in the first column",
+                "fr": "Oui, date et heure en première colonne",
+                "de": "Ja, Datum und Uhrzeit in der ersten Spalte",
+                "es": "Sí, fecha y hora en la primera columna"
+              }
+            },
+            {
+              "value": "none",
+              "label": {
+                "en": "No",
+                "fr": "Non",
+                "de": "Nein",
+                "es": "No"
+              }
+            }
+          ],
+          "default": "add",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "cell_changed",
+      "label": {
+        "en": "Google Sheets: cell changed",
+        "fr": "Google Sheets : cellule modifiée",
+        "de": "Google Sheets: Zelle geändert",
+        "es": "Google Sheets: celda cambiada"
+      },
+      "description": {
+        "en": "The value of a watched cell changed (typed, a formula…). Not for the changes made by Gladys.",
+        "fr": "La valeur d’une cellule surveillée a changé (saisie, formule…). Pas pour les changements faits par Gladys.",
+        "de": "Der Wert einer überwachten Zelle hat sich geändert (Eingabe, Formel…). Nicht für Änderungen durch Gladys.",
+        "es": "El valor de una celda vigilada cambió (escrito, fórmula…). No para los cambios hechos por Gladys."
+      },
+      "fields": [
+        {
+          "key": "watch",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Watch",
+            "fr": "Surveillance",
+            "de": "Überwachung",
+            "es": "Vigilancia"
+          },
+          "description": {
+            "en": "Leave empty for any watch.",
+            "fr": "Laissez vide pour toutes les surveillances.",
+            "de": "Leer lassen für jede Überwachung.",
+            "es": "Déjalo vacío para cualquier vigilancia."
+          },
+          "required": false
+        },
+        {
+          "key": "value",
+          "type": "string",
+          "label": {
+            "en": "Only when it becomes",
+            "fr": "Seulement quand elle devient",
+            "de": "Nur wenn er wird zu",
+            "es": "Solo cuando pase a ser"
+          },
+          "description": {
+            "en": "The new value, exactly as shown in the sheet. Empty: any change.",
+            "fr": "La nouvelle valeur, exactement comme affichée dans la feuille. Vide : tout changement.",
+            "de": "Der neue Wert, genau wie im Blatt angezeigt. Leer: jede Änderung.",
+            "es": "El nuevo valor, exactamente como se ve en la hoja. Vacío: cualquier cambio."
+          },
+          "placeholder": {
+            "en": "Done",
+            "fr": "Fait",
+            "de": "Erledigt",
+            "es": "Hecho"
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "watch_name",
+          "type": "string",
+          "label": {
+            "en": "Watch name",
+            "fr": "Nom de la surveillance",
+            "de": "Name der Überwachung",
+            "es": "Nombre de la vigilancia"
+          }
+        },
+        {
+          "key": "spreadsheet_name",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet name",
+            "fr": "Nom du classeur",
+            "de": "Name der Tabelle",
+            "es": "Nombre de la hoja de cálculo"
+          }
+        },
+        {
+          "key": "sheet_name",
+          "type": "string",
+          "label": {
+            "en": "Tab name",
+            "fr": "Nom de l’onglet",
+            "de": "Name des Tabellenblatts",
+            "es": "Nombre de la pestaña"
+          }
+        },
+        {
+          "key": "cell",
+          "type": "string",
+          "label": {
+            "en": "Cell",
+            "fr": "Cellule",
+            "de": "Zelle",
+            "es": "Celda"
+          }
+        },
+        {
+          "key": "value",
+          "type": "string",
+          "label": {
+            "en": "New value (as shown)",
+            "fr": "Nouvelle valeur (affichée)",
+            "de": "Neuer Wert (angezeigt)",
+            "es": "Nuevo valor (mostrado)"
+          }
+        },
+        {
+          "key": "previous_value",
+          "type": "string",
+          "label": {
+            "en": "Previous value",
+            "fr": "Valeur précédente",
+            "de": "Vorheriger Wert",
+            "es": "Valor anterior"
+          }
+        },
+        {
+          "key": "is_number",
+          "type": "boolean",
+          "label": {
+            "en": "It is a number",
+            "fr": "C’est un nombre",
+            "de": "Es ist eine Zahl",
+            "es": "Es un número"
+          }
+        },
+        {
+          "key": "number",
+          "type": "number",
+          "label": {
+            "en": "New number",
+            "fr": "Nouveau nombre",
+            "de": "Neue Zahl",
+            "es": "Nuevo número"
+          }
+        },
+        {
+          "key": "previous_number",
+          "type": "number",
+          "label": {
+            "en": "Previous number",
+            "fr": "Nombre précédent",
+            "de": "Vorherige Zahl",
+            "es": "Número anterior"
+          }
+        }
+      ]
+    },
+    {
+      "key": "row_added",
+      "label": {
+        "en": "Google Sheets: row added",
+        "fr": "Google Sheets : ligne ajoutée",
+        "de": "Google Sheets: Zeile hinzugefügt",
+        "es": "Google Sheets: fila añadida"
+      },
+      "description": {
+        "en": "A new row appeared in a watched tab (Google Forms answer…). Not for the rows added by Gladys.",
+        "fr": "Une nouvelle ligne est apparue dans un onglet surveillé (réponse Google Forms…). Pas pour celles ajoutées par Gladys.",
+        "de": "Eine neue Zeile erschien in einem überwachten Tabellenblatt (Google-Forms-Antwort…). Nicht für von Gladys hinzugefügte.",
+        "es": "Apareció una fila nueva en una pestaña vigilada (respuesta de Google Forms…). No para las añadidas por Gladys."
+      },
+      "fields": [
+        {
+          "key": "watch",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Watch",
+            "fr": "Surveillance",
+            "de": "Überwachung",
+            "es": "Vigilancia"
+          },
+          "description": {
+            "en": "Leave empty for any watch.",
+            "fr": "Laissez vide pour toutes les surveillances.",
+            "de": "Leer lassen für jede Überwachung.",
+            "es": "Déjalo vacío para cualquier vigilancia."
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "watch_name",
+          "type": "string",
+          "label": {
+            "en": "Watch name",
+            "fr": "Nom de la surveillance",
+            "de": "Name der Überwachung",
+            "es": "Nombre de la vigilancia"
+          }
+        },
+        {
+          "key": "spreadsheet_name",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet name",
+            "fr": "Nom du classeur",
+            "de": "Name der Tabelle",
+            "es": "Nombre de la hoja de cálculo"
+          }
+        },
+        {
+          "key": "sheet_name",
+          "type": "string",
+          "label": {
+            "en": "Tab name",
+            "fr": "Nom de l’onglet",
+            "de": "Name des Tabellenblatts",
+            "es": "Nombre de la pestaña"
+          }
+        },
+        {
+          "key": "row",
+          "type": "number",
+          "label": {
+            "en": "Row number",
+            "fr": "Numéro de ligne",
+            "de": "Zeilennummer",
+            "es": "Número de fila"
+          }
+        },
+        {
+          "key": "first_column",
+          "type": "string",
+          "label": {
+            "en": "Letter of the first column",
+            "fr": "Lettre de la première colonne",
+            "de": "Buchstabe der ersten Spalte",
+            "es": "Letra de la primera columna"
+          }
+        },
+        {
+          "key": "values",
+          "type": "string",
+          "label": {
+            "en": "Every value (separated by |)",
+            "fr": "Toutes les valeurs (séparées par |)",
+            "de": "Alle Werte (getrennt durch |)",
+            "es": "Todos los valores (separados por |)"
+          }
+        },
+        {
+          "key": "column_1",
+          "type": "string",
+          "label": {
+            "en": "Column 1",
+            "fr": "Colonne 1",
+            "de": "Spalte 1",
+            "es": "Columna 1"
+          }
+        },
+        {
+          "key": "column_2",
+          "type": "string",
+          "label": {
+            "en": "Column 2",
+            "fr": "Colonne 2",
+            "de": "Spalte 2",
+            "es": "Columna 2"
+          }
+        },
+        {
+          "key": "column_3",
+          "type": "string",
+          "label": {
+            "en": "Column 3",
+            "fr": "Colonne 3",
+            "de": "Spalte 3",
+            "es": "Columna 3"
+          }
+        },
+        {
+          "key": "column_4",
+          "type": "string",
+          "label": {
+            "en": "Column 4",
+            "fr": "Colonne 4",
+            "de": "Spalte 4",
+            "es": "Columna 4"
+          }
+        },
+        {
+          "key": "column_5",
+          "type": "string",
+          "label": {
+            "en": "Column 5",
+            "fr": "Colonne 5",
+            "de": "Spalte 5",
+            "es": "Columna 5"
+          }
+        },
+        {
+          "key": "column_6",
+          "type": "string",
+          "label": {
+            "en": "Column 6",
+            "fr": "Colonne 6",
+            "de": "Spalte 6",
+            "es": "Columna 6"
+          }
+        },
+        {
+          "key": "column_7",
+          "type": "string",
+          "label": {
+            "en": "Column 7",
+            "fr": "Colonne 7",
+            "de": "Spalte 7",
+            "es": "Columna 7"
+          }
+        },
+        {
+          "key": "column_8",
+          "type": "string",
+          "label": {
+            "en": "Column 8",
+            "fr": "Colonne 8",
+            "de": "Spalte 8",
+            "es": "Columna 8"
+          }
+        },
+        {
+          "key": "column_9",
+          "type": "string",
+          "label": {
+            "en": "Column 9",
+            "fr": "Colonne 9",
+            "de": "Spalte 9",
+            "es": "Columna 9"
+          }
+        },
+        {
+          "key": "column_10",
+          "type": "string",
+          "label": {
+            "en": "Column 10",
+            "fr": "Colonne 10",
+            "de": "Spalte 10",
+            "es": "Columna 10"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "append_row",
+      "label": {
+        "en": "Google Sheets: add a row",
+        "fr": "Google Sheets : ajouter une ligne",
+        "de": "Google Sheets: Zeile hinzufügen",
+        "es": "Google Sheets: añadir una fila"
+      },
+      "description": {
+        "en": "Adds a row under the table of a tab: a temperature log, a meter reading, an arrival.",
+        "fr": "Ajoute une ligne sous le tableau d’un onglet : journal de températures, relevé de compteur, arrivée.",
+        "de": "Fügt eine Zeile unter der Tabelle eines Blatts hinzu: Temperaturprotokoll, Zählerstand, Ankunft.",
+        "es": "Añade una fila bajo la tabla de una pestaña: registro de temperaturas, lectura de contador, llegada."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "spreadsheet",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet",
+            "fr": "Classeur",
+            "de": "Tabelle",
+            "es": "Hoja de cálculo"
+          },
+          "description": {
+            "en": "URL or ID. Empty: the default spreadsheet of the configuration.",
+            "fr": "URL ou identifiant. Vide : le classeur par défaut de la configuration.",
+            "de": "URL oder ID. Leer: die Standardtabelle der Konfiguration.",
+            "es": "URL o ID. Vacío: la hoja predeterminada de la configuración."
+          },
+          "placeholder": {
+            "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+          },
+          "required": false
+        },
+        {
+          "key": "sheet",
+          "type": "string",
+          "label": {
+            "en": "Tab",
+            "fr": "Onglet",
+            "de": "Tabellenblatt",
+            "es": "Pestaña"
+          },
+          "description": {
+            "en": "Its name, as shown at the bottom of the spreadsheet. Empty: the tab of the URL (gid), or the first one.",
+            "fr": "Son nom, tel qu’affiché en bas du classeur. Vide : l’onglet de l’URL (gid), ou le premier.",
+            "de": "Sein Name, wie unten in der Tabelle angezeigt. Leer: das Blatt der URL (gid) oder das erste.",
+            "es": "Su nombre, tal como aparece abajo en la hoja. Vacío: la pestaña de la URL (gid) o la primera."
+          },
+          "placeholder": {
+            "en": "Sheet1",
+            "fr": "Feuille 1",
+            "de": "Tabellenblatt1",
+            "es": "Hoja 1"
+          },
+          "required": false
+        },
+        {
+          "key": "values",
+          "type": "string",
+          "label": {
+            "en": "Values",
+            "fr": "Valeurs",
+            "de": "Werte",
+            "es": "Valores"
+          },
+          "description": {
+            "en": "Separate the columns with |. Scene variables are allowed.",
+            "fr": "Séparez les colonnes par |. Les variables de scène sont acceptées.",
+            "de": "Trenne die Spalten mit |. Szenenvariablen sind erlaubt.",
+            "es": "Separa las columnas con |. Se admiten variables de escena."
+          },
+          "placeholder": {
+            "en": "21.5 | Living room",
+            "fr": "21.5 | Living room",
+            "de": "21.5 | Living room",
+            "es": "21.5 | Living room"
+          },
+          "required": true
+        },
+        {
+          "key": "timestamp",
+          "type": "select",
+          "label": {
+            "en": "Date and time",
+            "fr": "Date et heure",
+            "de": "Datum und Uhrzeit",
+            "es": "Fecha y hora"
+          },
+          "options": [
+            {
+              "value": "none",
+              "label": {
+                "en": "No",
+                "fr": "Non",
+                "de": "Nein",
+                "es": "No"
+              }
+            },
+            {
+              "value": "first",
+              "label": {
+                "en": "In the first column",
+                "fr": "En première colonne",
+                "de": "In der ersten Spalte",
+                "es": "En la primera columna"
+              }
+            }
+          ],
+          "default": "first",
+          "required": false
+        },
+        {
+          "key": "input",
+          "type": "select",
+          "label": {
+            "en": "Values",
+            "fr": "Valeurs",
+            "de": "Werte",
+            "es": "Valores"
+          },
+          "options": [
+            {
+              "value": "user_entered",
+              "label": {
+                "en": "As if typed (numbers, dates, formulas)",
+                "fr": "Comme saisies (nombres, dates, formules)",
+                "de": "Wie eingetippt (Zahlen, Daten, Formeln)",
+                "es": "Como si se escribieran (números, fechas, fórmulas)"
+              }
+            },
+            {
+              "value": "raw",
+              "label": {
+                "en": "Raw text, never a formula",
+                "fr": "Texte brut, jamais une formule",
+                "de": "Reiner Text, nie eine Formel",
+                "es": "Texto sin formato, nunca una fórmula"
+              }
+            }
+          ],
+          "default": "user_entered",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "key": "row",
+          "type": "number",
+          "label": {
+            "en": "Row number",
+            "fr": "Numéro de ligne",
+            "de": "Zeilennummer",
+            "es": "Número de fila"
+          }
+        },
+        {
+          "key": "updated_range",
+          "type": "string",
+          "label": {
+            "en": "Cells written",
+            "fr": "Cellules écrites",
+            "de": "Geschriebene Zellen",
+            "es": "Celdas escritas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "write_cells",
+      "label": {
+        "en": "Google Sheets: write cells",
+        "fr": "Google Sheets : écrire des cellules",
+        "de": "Google Sheets: Zellen schreiben",
+        "es": "Google Sheets: escribir celdas"
+      },
+      "description": {
+        "en": "Writes values from a cell to the right: a counter, a status, the last time something happened.",
+        "fr": "Écrit des valeurs à partir d’une cellule vers la droite : compteur, état, dernière fois qu’un événement a eu lieu.",
+        "de": "Schreibt Werte ab einer Zelle nach rechts: ein Zähler, ein Status, das letzte Mal, dass etwas geschah.",
+        "es": "Escribe valores desde una celda hacia la derecha: un contador, un estado, la última vez que pasó algo."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "spreadsheet",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet",
+            "fr": "Classeur",
+            "de": "Tabelle",
+            "es": "Hoja de cálculo"
+          },
+          "description": {
+            "en": "URL or ID. Empty: the default spreadsheet of the configuration.",
+            "fr": "URL ou identifiant. Vide : le classeur par défaut de la configuration.",
+            "de": "URL oder ID. Leer: die Standardtabelle der Konfiguration.",
+            "es": "URL o ID. Vacío: la hoja predeterminada de la configuración."
+          },
+          "placeholder": {
+            "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+          },
+          "required": false
+        },
+        {
+          "key": "sheet",
+          "type": "string",
+          "label": {
+            "en": "Tab",
+            "fr": "Onglet",
+            "de": "Tabellenblatt",
+            "es": "Pestaña"
+          },
+          "description": {
+            "en": "Its name, as shown at the bottom of the spreadsheet. Empty: the tab of the URL (gid), or the first one.",
+            "fr": "Son nom, tel qu’affiché en bas du classeur. Vide : l’onglet de l’URL (gid), ou le premier.",
+            "de": "Sein Name, wie unten in der Tabelle angezeigt. Leer: das Blatt der URL (gid) oder das erste.",
+            "es": "Su nombre, tal como aparece abajo en la hoja. Vacío: la pestaña de la URL (gid) o la primera."
+          },
+          "placeholder": {
+            "en": "Sheet1",
+            "fr": "Feuille 1",
+            "de": "Tabellenblatt1",
+            "es": "Hoja 1"
+          },
+          "required": false
+        },
+        {
+          "key": "range",
+          "type": "string",
+          "label": {
+            "en": "Cells",
+            "fr": "Cellules",
+            "de": "Zellen",
+            "es": "Celdas"
+          },
+          "description": {
+            "en": "The first cell (B2), or a row of cells (B2:D2).",
+            "fr": "La première cellule (B2), ou une ligne de cellules (B2:D2).",
+            "de": "Die erste Zelle (B2) oder eine Zeile von Zellen (B2:D2).",
+            "es": "La primera celda (B2) o una fila de celdas (B2:D2)."
+          },
+          "placeholder": {
+            "en": "B2",
+            "fr": "B2",
+            "de": "B2",
+            "es": "B2"
+          },
+          "required": true
+        },
+        {
+          "key": "values",
+          "type": "string",
+          "label": {
+            "en": "Values",
+            "fr": "Valeurs",
+            "de": "Werte",
+            "es": "Valores"
+          },
+          "description": {
+            "en": "Separate the columns with |. Scene variables are allowed.",
+            "fr": "Séparez les colonnes par |. Les variables de scène sont acceptées.",
+            "de": "Trenne die Spalten mit |. Szenenvariablen sind erlaubt.",
+            "es": "Separa las columnas con |. Se admiten variables de escena."
+          },
+          "placeholder": {
+            "en": "21.5 | Living room",
+            "fr": "21.5 | Living room",
+            "de": "21.5 | Living room",
+            "es": "21.5 | Living room"
+          },
+          "required": true
+        },
+        {
+          "key": "input",
+          "type": "select",
+          "label": {
+            "en": "Values",
+            "fr": "Valeurs",
+            "de": "Werte",
+            "es": "Valores"
+          },
+          "options": [
+            {
+              "value": "user_entered",
+              "label": {
+                "en": "As if typed (numbers, dates, formulas)",
+                "fr": "Comme saisies (nombres, dates, formules)",
+                "de": "Wie eingetippt (Zahlen, Daten, Formeln)",
+                "es": "Como si se escribieran (números, fechas, fórmulas)"
+              }
+            },
+            {
+              "value": "raw",
+              "label": {
+                "en": "Raw text, never a formula",
+                "fr": "Texte brut, jamais une formule",
+                "de": "Reiner Text, nie eine Formel",
+                "es": "Texto sin formato, nunca una fórmula"
+              }
+            }
+          ],
+          "default": "user_entered",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "key": "updated_range",
+          "type": "string",
+          "label": {
+            "en": "Cells written",
+            "fr": "Cellules écrites",
+            "de": "Geschriebene Zellen",
+            "es": "Celdas escritas"
+          }
+        },
+        {
+          "key": "updated_cells",
+          "type": "number",
+          "label": {
+            "en": "Number of cells written",
+            "fr": "Nombre de cellules écrites",
+            "de": "Anzahl geschriebener Zellen",
+            "es": "Número de celdas escritas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "read_cells",
+      "label": {
+        "en": "Google Sheets: read cells",
+        "fr": "Google Sheets : lire des cellules",
+        "de": "Google Sheets: Zellen lesen",
+        "es": "Google Sheets: leer celdas"
+      },
+      "description": {
+        "en": "Reads a cell or a range, for a message or a condition (a target temperature, the menu of the day).",
+        "fr": "Lit une cellule ou une plage, pour un message ou une condition (consigne, menu du jour).",
+        "de": "Liest eine Zelle oder einen Bereich, für eine Nachricht oder eine Bedingung (Solltemperatur, Tagesmenü).",
+        "es": "Lee una celda o un rango, para un mensaje o una condición (temperatura objetivo, menú del día)."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "spreadsheet",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet",
+            "fr": "Classeur",
+            "de": "Tabelle",
+            "es": "Hoja de cálculo"
+          },
+          "description": {
+            "en": "URL or ID. Empty: the default spreadsheet of the configuration.",
+            "fr": "URL ou identifiant. Vide : le classeur par défaut de la configuration.",
+            "de": "URL oder ID. Leer: die Standardtabelle der Konfiguration.",
+            "es": "URL o ID. Vacío: la hoja predeterminada de la configuración."
+          },
+          "placeholder": {
+            "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+          },
+          "required": false
+        },
+        {
+          "key": "sheet",
+          "type": "string",
+          "label": {
+            "en": "Tab",
+            "fr": "Onglet",
+            "de": "Tabellenblatt",
+            "es": "Pestaña"
+          },
+          "description": {
+            "en": "Its name, as shown at the bottom of the spreadsheet. Empty: the tab of the URL (gid), or the first one.",
+            "fr": "Son nom, tel qu’affiché en bas du classeur. Vide : l’onglet de l’URL (gid), ou le premier.",
+            "de": "Sein Name, wie unten in der Tabelle angezeigt. Leer: das Blatt der URL (gid) oder das erste.",
+            "es": "Su nombre, tal como aparece abajo en la hoja. Vacío: la pestaña de la URL (gid) o la primera."
+          },
+          "placeholder": {
+            "en": "Sheet1",
+            "fr": "Feuille 1",
+            "de": "Tabellenblatt1",
+            "es": "Hoja 1"
+          },
+          "required": false
+        },
+        {
+          "key": "range",
+          "type": "string",
+          "label": {
+            "en": "Cells",
+            "fr": "Cellules",
+            "de": "Zellen",
+            "es": "Celdas"
+          },
+          "description": {
+            "en": "A cell (B2) or a range (A2:C10).",
+            "fr": "Une cellule (B2) ou une plage (A2:C10).",
+            "de": "Eine Zelle (B2) oder ein Bereich (A2:C10).",
+            "es": "Una celda (B2) o un rango (A2:C10)."
+          },
+          "placeholder": {
+            "en": "B2",
+            "fr": "B2",
+            "de": "B2",
+            "es": "B2"
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "value",
+          "type": "string",
+          "label": {
+            "en": "First cell (as shown)",
+            "fr": "Première cellule (affichée)",
+            "de": "Erste Zelle (angezeigt)",
+            "es": "Primera celda (mostrada)"
+          }
+        },
+        {
+          "key": "number",
+          "type": "number",
+          "label": {
+            "en": "First cell (number)",
+            "fr": "Première cellule (nombre)",
+            "de": "Erste Zelle (Zahl)",
+            "es": "Primera celda (número)"
+          }
+        },
+        {
+          "key": "is_number",
+          "type": "boolean",
+          "label": {
+            "en": "The first cell is a number",
+            "fr": "La première cellule est un nombre",
+            "de": "Die erste Zelle ist eine Zahl",
+            "es": "La primera celda es un número"
+          }
+        },
+        {
+          "key": "values",
+          "type": "string",
+          "label": {
+            "en": "Every value (rows on separate lines)",
+            "fr": "Toutes les valeurs (une ligne par ligne)",
+            "de": "Alle Werte (eine Zeile pro Zeile)",
+            "es": "Todos los valores (una fila por línea)"
+          }
+        },
+        {
+          "key": "cell_count",
+          "type": "number",
+          "label": {
+            "en": "Filled cells",
+            "fr": "Cellules remplies",
+            "de": "Gefüllte Zellen",
+            "es": "Celdas con datos"
+          }
+        },
+        {
+          "key": "row_count",
+          "type": "number",
+          "label": {
+            "en": "Filled rows",
+            "fr": "Lignes remplies",
+            "de": "Gefüllte Zeilen",
+            "es": "Filas con datos"
+          }
+        }
+      ]
+    },
+    {
+      "key": "clear_range",
+      "label": {
+        "en": "Google Sheets: clear cells",
+        "fr": "Google Sheets : effacer des cellules",
+        "de": "Google Sheets: Zellen leeren",
+        "es": "Google Sheets: borrar celdas"
+      },
+      "description": {
+        "en": "Empties the values of a range (the formatting is kept): reset a weekly log.",
+        "fr": "Vide les valeurs d’une plage (la mise en forme est conservée) : remettre à zéro un journal hebdomadaire.",
+        "de": "Leert die Werte eines Bereichs (die Formatierung bleibt): ein Wochenprotokoll zurücksetzen.",
+        "es": "Vacía los valores de un rango (el formato se conserva): reiniciar un registro semanal."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "spreadsheet",
+          "type": "string",
+          "label": {
+            "en": "Spreadsheet",
+            "fr": "Classeur",
+            "de": "Tabelle",
+            "es": "Hoja de cálculo"
+          },
+          "description": {
+            "en": "URL or ID. Empty: the default spreadsheet of the configuration.",
+            "fr": "URL ou identifiant. Vide : le classeur par défaut de la configuration.",
+            "de": "URL oder ID. Leer: die Standardtabelle der Konfiguration.",
+            "es": "URL o ID. Vacío: la hoja predeterminada de la configuración."
+          },
+          "placeholder": {
+            "en": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "fr": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "de": "https://docs.google.com/spreadsheets/d/1AbC…/edit",
+            "es": "https://docs.google.com/spreadsheets/d/1AbC…/edit"
+          },
+          "required": false
+        },
+        {
+          "key": "sheet",
+          "type": "string",
+          "label": {
+            "en": "Tab",
+            "fr": "Onglet",
+            "de": "Tabellenblatt",
+            "es": "Pestaña"
+          },
+          "description": {
+            "en": "Its name, as shown at the bottom of the spreadsheet. Empty: the tab of the URL (gid), or the first one.",
+            "fr": "Son nom, tel qu’affiché en bas du classeur. Vide : l’onglet de l’URL (gid), ou le premier.",
+            "de": "Sein Name, wie unten in der Tabelle angezeigt. Leer: das Blatt der URL (gid) oder das erste.",
+            "es": "Su nombre, tal como aparece abajo en la hoja. Vacío: la pestaña de la URL (gid) o la primera."
+          },
+          "placeholder": {
+            "en": "Sheet1",
+            "fr": "Feuille 1",
+            "de": "Tabellenblatt1",
+            "es": "Hoja 1"
+          },
+          "required": false
+        },
+        {
+          "key": "range",
+          "type": "string",
+          "label": {
+            "en": "Cells",
+            "fr": "Cellules",
+            "de": "Zellen",
+            "es": "Celdas"
+          },
+          "description": {
+            "en": "Like A2:D100, or A2:D for every row from the second.",
+            "fr": "Comme A2:D100, ou A2:D pour toutes les lignes à partir de la deuxième.",
+            "de": "Wie A2:D100, oder A2:D für alle Zeilen ab der zweiten.",
+            "es": "Como A2:D100, o A2:D para todas las filas desde la segunda."
+          },
+          "placeholder": {
+            "en": "A2:D",
+            "fr": "A2:D",
+            "de": "A2:D",
+            "es": "A2:D"
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "cleared_range",
+          "type": "string",
+          "label": {
+            "en": "Cells emptied",
+            "fr": "Cellules vidées",
+            "de": "Geleerte Zellen",
+            "es": "Celdas vaciadas"
+          }
+        }
+      ]
+    }
+  ]
+}
