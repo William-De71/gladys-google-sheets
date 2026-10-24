@@ -5,6 +5,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
+## [0.1.1] - 2026-10-24
+
+### Security
+
+- **security:** build the image on Node.js 24.22.1 or later ([0e8e33d](https://github.com/William-De71/gladys-google-sheets/commit/0e8e33dc08e469cf31a885dca309da680b6053fd))
+
 ## [0.1.0] - 2026-10-18
 
 ### Added
@@ -18,4 +24,5 @@ each release from the Conventional Commits: do not edit it by hand.
 - Reading by an internal timer (every 2 minutes by default), with a local limit under the 60 requests a minute of Google and an exponential backoff on HTTP 429.
 - English, French, German and Spanish everywhere: settings, devices, widgets, scenes and documentation.
 
+[0.1.1]: https://github.com/William-De71/gladys-google-sheets/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/William-De71/gladys-google-sheets/releases/tag/v0.1.0
