@@ -14,7 +14,7 @@ Esta integración conecta Gladys con tus hojas de cálculo de **Google Sheets**,
 
 ## Requisitos
 
-- Gladys **5.2.0** o posterior (formularios de widget).
+- Gladys **5.3.0** o posterior (formularios de widget).
 - Una cuenta de Google (personal o Workspace) y las hojas que quieras usar: las tuyas, o compartidas contigo con permiso de edición (la lectura basta para las vigilancias y «leer celdas»).
 - Un **proyecto de Google Cloud** gratuito en el que creas **tu propio cliente OAuth**: Google no permite compartir una clave y la integración no incluye ninguna. Cuenta unos diez minutos, una sola vez.
 

@@ -5,7 +5,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/William-De71/gladys-google-sheets?sort=semver)](https://github.com/William-De71/gladys-google-sheets/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-google-sheets/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-google-sheets/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.2.0-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![Google Sheets for Gladys Assistant](cover.jpg)
 
@@ -86,7 +86,7 @@ Not implemented: a widget for the watched cells (they are devices, the dashboard
 
 ## Requirements
 
-- Gladys **5.2.0** or later (older versions cannot install the integration: widget forms, widgets and scenes).
+- Gladys **5.3.0** or later (older versions cannot install the integration: widget forms, widgets and scenes, catalog keywords of Gladys 5.3).
 - A Google account and the spreadsheets to use (yours or shared with you).
 - A free Google Cloud project with the Google Sheets API enabled, a consent screen **In production** and an OAuth client of type **Web application** whose redirect URI is `https://my.gladysassistant.com/redirect/oauth` (step by step in the [documentation](docs/en.md#configuration)).
 

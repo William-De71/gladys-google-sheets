@@ -14,7 +14,7 @@ Cette intégration relie Gladys à vos classeurs **Google Sheets**, dans les deu
 
 ## Prérequis
 
-- Gladys **5.2.0** ou plus récent (formulaires de widget).
+- Gladys **5.3.0** ou plus récent (formulaires de widget).
 - Un compte Google (personnel ou Workspace) et les classeurs à utiliser : les vôtres, ou partagés avec vous en modification (la lecture seule suffit pour les surveillances et « lire des cellules »).
 - Un **projet Google Cloud** gratuit dans lequel vous créez **votre propre client OAuth** : Google n’autorise pas le partage d’une clé, et l’intégration n’en embarque aucune. Comptez une dizaine de minutes, une seule fois.
 

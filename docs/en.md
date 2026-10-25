@@ -14,7 +14,7 @@ This integration connects Gladys to your **Google Sheets** spreadsheets, both wa
 
 ## Requirements
 
-- Gladys **5.2.0** or later (widget forms).
+- Gladys **5.3.0** or later (widget forms).
 - A Google account (personal or Workspace) and the spreadsheets you want to use: your own, or shared with you with the right to edit (read-only is enough for watches and "read cells").
 - A free **Google Cloud project** in which you create **your own OAuth client**: Google does not allow sharing a key, and the integration ships none. Count about ten minutes, once.
 

@@ -14,7 +14,7 @@ Diese Integration verbindet Gladys in beide Richtungen mit deinen **Google-Sheet
 
 ## Voraussetzungen
 
-- Gladys **5.2.0** oder neuer (Widget-Formulare).
+- Gladys **5.3.0** oder neuer (Widget-Formulare).
 - Ein Google-Konto (privat oder Workspace) und die zu nutzenden Tabellen: deine eigenen oder mit Bearbeitungsrecht für dich freigegebene (Leserechte genügen für Überwachungen und „Zellen lesen“).
 - Ein kostenloses **Google-Cloud-Projekt**, in dem du **deinen eigenen OAuth-Client** anlegst: Google erlaubt keinen gemeinsamen Schlüssel, und die Integration liefert keinen mit. Rechne mit etwa zehn Minuten, einmalig.
 

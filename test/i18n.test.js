@@ -142,7 +142,7 @@ test('README: badges, the cover under them, the widget image of their language',
     assert.match(lines[badges], /badge\/(license|licence|Lizenz|licencia)-Apache--2\.0/, file);
     assert.match(text, /github\/v\/release\/William-De71\/gladys-google-sheets\?sort=semver/, file);
     assert.match(text, /workflow\/status\/William-De71\/gladys-google-sheets\/release\.yml/, file);
-    assert.match(text, /Gladys-%E2%89%A5%205\.2\.0/, file);
+    assert.match(text, /Gladys-%E2%89%A5%205\.3\.0/, file);
     // The cover right under the four badges, before the pitch.
     assert.match(
       lines[badges + 5],
