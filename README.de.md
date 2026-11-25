@@ -134,7 +134,7 @@ Jeder Merge auf `main` startet die CI und berechnet dann die Version aus den [Co
 
 - Der Pull-Request-Titel wird zum Squash-Commit und dann zur Changelog-Zeile: Schreibe ihn auf Englisch, für Nutzer (`pr-title.yml` prüft ihn). Bearbeite `CHANGELOG.md` nie von Hand.
 - 1.0.0 ist eine Entscheidung: Actions → Release → Run workflow mit `release-as: 1.0.0`. `dry-run` zeigt Version und Notizen, ohne zu veröffentlichen.
-- **Geschützter Branch**: Das Release pusht seinen Commit mit `GITHUB_TOKEN` auf `main`. Verlangt ein Ruleset auf `main` Pull Requests oder Status-Checks, füge GitHub Actions seiner Ausnahmeliste hinzu (oder pushe über eine GitHub App), sonst schlägt der Veröffentlichungsjob fehl. Das Ruleset `protect-main` (kein Löschen, kein Force-Push) lässt ihn durch.
+- **Geschützter Branch**: Rulesets verlangen einen Pull Request auf `main` und sperren die `v*`-Tags; nur der Maintainer und Deploy Keys kommen durch. Das Release pusht mit dem Deploy Key der Umgebung `release` (Secret `RELEASE_DEPLOY_KEY`, nur `main`): Ein Lauf von einem anderen Branch erhält ihn nie. `build.yml` und `github-release.yml` starten nicht bei einem Tag: Das Release ruft sie auf, oder starten Sie sie von Hand (Actions → Run workflow, mit `version` für das Image), um ein Release abzuschließen.
 - Nach dem ersten Release muss das `ghcr.io`-Paket öffentlich sein (Package settings → Change visibility).
 
 ## Fehlerbehebung

@@ -134,7 +134,7 @@ Cada fusión en `main` ejecuta la CI y calcula la versión a partir de los [Conv
 
 - El título de la pull request se convierte en el commit squash y luego en la línea del changelog: escríbelo en inglés, para el usuario (`pr-title.yml` lo comprueba). No edites nunca `CHANGELOG.md` a mano.
 - La 1.0.0 es una decisión: Actions → Release → Run workflow con `release-as: 1.0.0`. `dry-run` muestra la versión y las notas sin publicar nada.
-- **Rama protegida**: la publicación sube su commit a `main` con `GITHUB_TOKEN`. Con un ruleset que exija pull requests o status checks en `main`, añade GitHub Actions a su lista de excepciones (o sube mediante una GitHub App), si no el job de publicación falla. El ruleset `protect-main` (sin borrado ni force push) lo deja pasar.
+- **Rama protegida**: unos rulesets exigen una pull request en `main` y bloquean las etiquetas `v*`; solo pasan el mantenedor y las deploy keys. La publicación hace push con la deploy key del entorno `release` (secreto `RELEASE_DEPLOY_KEY`, solo `main`): una ejecución lanzada desde otra rama nunca la obtiene. `build.yml` y `github-release.yml` no arrancan con una etiqueta: la publicación los llama, o lánzelos a mano (Actions → Run workflow, con `version` para la imagen) para terminar una publicación.
 - Tras la primera publicación, el paquete `ghcr.io` debe ser público (Package settings → Change visibility).
 
 ## Solución de problemas
